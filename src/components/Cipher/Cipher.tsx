@@ -1,65 +1,11 @@
 import './Cipher.scss'
-
-const STANDARD_BACON: Record<string, string> = {
-    a: "AAAAA",
-    b: "AAAAB",
-    c: "AAABA",
-    d: "AAABB",
-    e: "AABAA",
-    f: "AABAB",
-    g: "AABBA",
-    h: "AABBB",
-    i: "ABAAA",
-    j: "ABAAB",
-    k: "ABABA",
-    l: "ABABB",
-    m: "ABBAA",
-    n: "ABBAB",
-    o: "ABBBA",
-    p: "ABBBB",
-    q: "BAAAA",
-    r: "BAAAB",
-    s: "BAABA",
-    t: "BAABB",
-    u: "BABAA",
-    v: "BABAB",
-    w: "BABBA",
-    x: "BABBB",
-    y: "BBAAA",
-    z: "BBAAB",
-  }
-  
-  // I/J and U/V combined version
-  const COMBINED_BACON: Record<string, string> = {
-    a: "AAAAA",
-    b: "AAAAB",
-    c: "AAABA",
-    d: "AAABB",
-    e: "AABAA",
-    f: "AABAB",
-    g: "AABBA",
-    h: "AABBB",
-    i: "ABAAA",
-    j: "ABAAA",
-    k: "ABABA",
-    l: "ABABB",
-    m: "ABBAA",
-    n: "ABBAB",
-    o: "ABBBA",
-    p: "ABBBB",
-    q: "BAAAA",
-    r: "BAAAB",
-    s: "BAABA",
-    t: "BAABB",
-    u: "BABAA",
-    v: "BABAA",
-    w: "BABBA",
-    x: "BABBB",
-    y: "BBAAA",
-    z: "BBAAB",
-  }
+import type { RootState } from '../../lib/store'
+import { useSelector, useDispatch } from 'react-redux'
+import { setInputText } from '../../lib/features/baconCipher/baconCipherSlice'
 
 const Cipher = () => {
+    const cipher = useSelector((state:RootState) => state.baconCipher)
+    const dispatch = useDispatch();
     return (
         <>
             <div className="cipher bg-gray-700 rounded px-7 py-5 mt-10">
@@ -68,15 +14,17 @@ const Cipher = () => {
                         <table className='w-full caption-bottom text-lg'>
                             <thead className='[&_tr]:border-b'>
                                 <tr className='h-12 px-4 text-left align-middle font-medium text-muted-foreground '>
-                                    <th className='h-12 px-4 text-left   align-middle font-medium text-muted-foreground  '>Letter</th>
-                                    <th className='h-12 px-4 text-left align-middle font-medium text-muted-foreground  '>Code</th>
+                                    <th className='h-12 px-4 text-left   align-middle font-medium text-muted-foreground text-3xl '>Letter</th>
+                                    <th className='h-12 px-4 text-left align-middle font-medium text-muted-foreground  text-3xl'>Code</th>
                                 </tr>
                             </thead>
                             <tbody>
-                            <tr className='h-12 px-4 text-left align-middle font-medium text-muted-foreground '>
-                                    <th className='h-12 px-4 text-left align-middle font-medium text-muted-foreground '>a</th>
-                                    <th className='h-12 px-4 text-left align-middle font-medium text-muted-foreground '>AAAAA</th>
-                                </tr>
+                                {Object.entries(cipher.substitutionTable).map(([letter,code]) => (
+                                    <tr key={letter} className='tr-cipher h-12 px-4 text-left align-middle font-medium text-muted-foreground '>
+                                        <th className='h-12 px-4 text-left align-middle font-medium text-muted-foreground text-xl '>{letter}</th>
+                                        <th className='h-12 px-4 text-left align-middle font-medium text-muted-foreground text-xl'>{code}</th>
+                                        </tr>
+                                ))}
                             </tbody>
                         </table>
                     </div>

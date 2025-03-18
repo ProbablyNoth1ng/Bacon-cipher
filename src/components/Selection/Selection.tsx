@@ -9,27 +9,50 @@ import { styled } from '@mui/material/styles';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 
+import type { RootState } from '../../lib/store'
+import { useSelector, useDispatch } from 'react-redux'
+import { setSeparateValues,setReplaceValues, setMode, setAlphabetStyle, removeData, flipTable } from '../../lib/features/baconCipher/baconCipherSlice'
+import { encode } from "punycode";
 
 const Selection = () => {
+    const cipherData = useSelector((state:RootState) => state.baconCipher)
+    const dispatch = useDispatch();
+
     const [standard, setStandard] = useState<string>('');
     const [crypt,setCrypt] = useState<boolean[]>([true,false])
     const [replace,setReplace] = useState<boolean>(false)
+    const [separateSwitch,setSeparateSwitch] = useState<boolean>(false)
 
-    const handleChange = (event:any) => {
+    const handleStandardChange = (event:any) => {
       setStandard(event.target.value);
-      console.log(event.target.classList)
+      dispatch(setAlphabetStyle(event.target.value))
     }
 
     const handleCryptToggle = (event:any) => {
-        //disabled
+      
         if(event.target.classList.contains("bg-gray-600")){
             console.log(event.target.classList.contains)
-            setCrypt([crypt[1],crypt[0]])   
+            setCrypt([crypt[1],crypt[0]])  
+            if(crypt[1]){
+              dispatch(setMode("encode"))
+              dispatch(flipTable('default'))
+            } else {
+              dispatch(setMode("decode"))
+              dispatch(flipTable('alternative'))
+            }
+
+            dispatch(removeData())
         }
     }
 
     const handleReplace = () =>{
         setReplace(!replace)
+        dispatch(setReplaceValues(!replace))
+    }
+    
+    const handleSwitch = () => {
+      setSeparateSwitch(!separateSwitch)
+      dispatch(setSeparateValues(!separateSwitch))
     }
     return (
         <>
@@ -39,19 +62,19 @@ const Selection = () => {
                         <button className={`text-white text-xl ${crypt[0] ? "bg-gray-700" : "bg-gray-600"} p-2 rounded-md cursor-pointer`} onClick={handleCryptToggle}>Encrypt (encode)</button>
                         <button className={`text-white text-xl ${crypt[1] ? "bg-gray-700" : "bg-gray-600"} p-2 rounded-md cursor-pointer`} onClick={handleCryptToggle}>Decrypt (decode)</button>
                     </div>
-                    <div className="standard-selection">
+                    <div className="standard-selection ">
                         <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
                             <InputLabel id="demo-simple-select-standard-label">Standard</InputLabel> 
                                 <Select
                                 labelId="demo-simple-select-standard-label"
                                 id="demo-simple-select-standard"
                                 value={standard}
-                                onChange={handleChange}
+                                onChange={handleStandardChange}
                                 label="Age"
                                 >
                     
-                                <MenuItem value={10}>Separate Values</MenuItem>
-                                <MenuItem value={20}>Standard(I=J, U=V)</MenuItem>
+                                <MenuItem value={'separate'}>Separate Values</MenuItem>
+                                <MenuItem value={'standard'}>Standard(I=J, U=V)</MenuItem>
 
                                 </Select>
                         </FormControl>
@@ -59,11 +82,12 @@ const Selection = () => {
                 </div>
                 <div className="selection-end flex justify-between items-center pt-5">
                     <FormControlLabel
-                        className=""
-                        control={<Android12Switch defaultChecked />}
+                        className="text-white"
+                        control={<Android12Switch defaultChecked={separateSwitch} />}
                         label="Separate values with spaces"
+                        onChange={handleSwitch}
                     />
-                    <p>Replace A with B: <span className="bg-gray-700 p-3 rounded-sm cursor-pointer" onClick={handleReplace}>{replace ? "B" : "A"}</span></p>
+                    <p className="text-white">Replace A with B: <span className="bg-gray-700 p-3 rounded-sm cursor-pointer" onClick={handleReplace}>{replace ? "B" : "A"}</span></p>
                 </div>
 
             </div>
