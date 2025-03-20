@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit' 
 import type { PayloadAction } from '@reduxjs/toolkit'
-import { defaultTable,alternativeTable } from '@/tables';
+import { defaultTable,alternativeTable, defaultIJUVTable, alternativeIJUVTable } from '@/tables';
 
 export interface BaconCipher {
     mode:'encode' | 'decode';
@@ -19,8 +19,8 @@ const initialState: BaconCipher = {
     separateValues:false,
     replaceLetters:false,
     substitutionTable: defaultTable,
-        inputText:'',
-        outputText:'',
+    inputText:'',
+    outputText:'',
 }
 
 const baconCipherSlice = createSlice({
@@ -33,6 +33,11 @@ const baconCipherSlice = createSlice({
         },
         setAlphabetStyle:(state,action:PayloadAction<'separate' | 'standard'>) => {
             state.alphabetStyle = action.payload
+            if(action.payload === 'standard'){
+              state.substitutionTable = defaultIJUVTable;
+            } else {
+              state.substitutionTable = defaultTable;
+            }
             console.log(`AlphabetStyle - ${action.payload}`)
         },
         setInputText:(state,action:PayloadAction<string>) => {
@@ -46,32 +51,41 @@ const baconCipherSlice = createSlice({
         setReplaceValues:(state,action:PayloadAction<boolean>) => {
             state.replaceLetters = action.payload
             console.log(`replace - ${action.payload} `)
-            if(action.payload){
-              state.substitutionTable = alternativeTable;
-              console.log('fliped')
+            if(state.alphabetStyle === 'separate'){
+              if(action.payload){
+                state.substitutionTable = alternativeTable;
+                console.log('fliped')
+              } else {
+                state.substitutionTable = defaultTable;
+                console.log('fliped')
+              }
             } else {
-              state.substitutionTable = defaultTable;
-              console.log('fliped')
+              if(action.payload){
+                state.substitutionTable = alternativeIJUVTable;
+                console.log('fliped')
+              } else {
+                state.substitutionTable = defaultIJUVTable;
+                console.log('fliped')
+              }
             }
+          
         },
         removeData:(state) => {
           state.inputText = "";
           state.outputText = "";
         },
-        flipTable:(state,action:PayloadAction<string>) => {
-          
-          
-        },
         
         encrypt: (state) => {
             let res: string[] = [];
             let input: string[];
+         
             if (state.separateValues) {
               input = state.inputText.split(' ');
               for (let word of input) {
                 for (let letter of word) {
                   Object.entries(state.substitutionTable).map(([tableLetter, tableCode]) => {
                     if (tableLetter === letter) {
+                      
                       res.push(tableCode);
                     }
                   });
@@ -82,6 +96,7 @@ const baconCipherSlice = createSlice({
               console.log(res)
               state.outputText = res.join('')
             } else {
+                console.log(state.substitutionTable)
                 input = state.inputText.split('');
                 for (let letter of input) {
                     Object.entries(state.substitutionTable).map(([tableLetter, tableCode]) => {
@@ -96,26 +111,31 @@ const baconCipherSlice = createSlice({
             }
         },
         decrypt:(state) => {
+            console.log(state.substitutionTable)
             console.log('decrypt')
             let res:string[] = []
             let input: string[];
             if(state.separateValues){
+
                input = state.inputText.split(' ')
                console.log(`inp - ${input}`)
-               for(let i = 0; i < input.length; i++){
-                
-                  for(let j = 0; j < input[i].length; j+=5){
-                    let inputTableCode = input[i].slice(j,j+5)
-                    console.log(inputTableCode)
-                    Object.entries(state.substitutionTable).map(([tableLetter, tableCode]) => {
+               if(state.alphabetStyle === 'standard'){
+                  for(let i = 0; i < input.length; i++){
+                  
+                    for(let j = 0; j < input[i].length; j+=5){
+                      let inputTableCode = input[i].slice(j,j+5)
+                      console.log(inputTableCode)
+                      Object.entries(state.substitutionTable).map(([tableLetter, tableCode]) => {
 
-                      if (inputTableCode === tableCode) {
-                        res.push(tableLetter);
-                      }
-                    });
-                  }
-                  res.push(' ')
+                        if (inputTableCode === tableCode) {
+                          res.push(tableLetter);
+                        }
+                      });
+                    }
+                    res.push(' ')
+                }
                }
+               
             } else {
               input = state.inputText.split('')
                 
@@ -125,18 +145,31 @@ const baconCipherSlice = createSlice({
                 Object.entries(state.substitutionTable).map(([tableLetter, tableCode]) => {
 
                   if (inputTableCode === tableCode) {
+                    console.log(`inputcode - ${inputTableCode}`)
+                    console.log(`letter- ${tableLetter}`)
                     res.push(tableLetter);
                   }
                 });
               }
             }
             console.log(res)
+
+            if (state.alphabetStyle === 'standard') {
+              for (let i = 0; i < res.length; i++) {
+                if (res[i] === 'v' || res[i] === 'j') {
+                  console.log(`removing ${res[i]} at index ${i}`)
+                  res.splice(i, 1) 
+                  i--
+                }
+              }
+            }
             state.outputText = res.join('')
+
         }
     }
-  });
-  
+});
 
 
-  export const {setMode, setAlphabetStyle, setInputText, setReplaceValues, setSeparateValues, removeData,flipTable, encrypt, decrypt} = baconCipherSlice.actions;
+
+  export const {setMode, setAlphabetStyle, setInputText, setReplaceValues, setSeparateValues, removeData, encrypt, decrypt} = baconCipherSlice.actions;
   export default baconCipherSlice.reducer

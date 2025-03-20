@@ -11,8 +11,7 @@ import Switch from '@mui/material/Switch';
 
 import type { RootState } from '../../lib/store'
 import { useSelector, useDispatch } from 'react-redux'
-import { setSeparateValues,setReplaceValues, setMode, setAlphabetStyle, removeData, flipTable } from '../../lib/features/baconCipher/baconCipherSlice'
-import { encode } from "punycode";
+import { setSeparateValues,setReplaceValues, setMode, setAlphabetStyle, removeData } from '../../lib/features/baconCipher/baconCipherSlice'
 
 const Selection = () => {
     const cipherData = useSelector((state:RootState) => state.baconCipher)
@@ -35,10 +34,8 @@ const Selection = () => {
             setCrypt([crypt[1],crypt[0]])  
             if(crypt[1]){
               dispatch(setMode("encode"))
-              dispatch(flipTable('default'))
-            } else {
+              } else {
               dispatch(setMode("decode"))
-              dispatch(flipTable('alternative'))
             }
 
             dispatch(removeData())
