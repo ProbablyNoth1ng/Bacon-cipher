@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
-import baconCipherReducer from './features/baconCipher/baconCipherSlice'
+import baconCipherReducer from './baconCipher/baconCipherSlice'
 
 export const makeStore = () => {
   return configureStore({

@@ -1,16 +1,14 @@
-import { useState } from 'react';
-import './Main.scss'
+import './App.scss'
 
-import Selection from '../Selection/Selection'
-import Inputs from '../Inputs/Inputs'
-import Cipher from '../Cipher/Cipher'
+import Cipher from './components/Cipher/Cipher'
+import Inputs from './components/Inputs/Inputs'
+import Selection from './components/Selection/Selection'
 
-const Main = () => {
+function App() {
 
-    return (
-        <>
-
-        <main className="main">
+  return (
+    <>
+      <main className="main">
             <h3 className='text-white text-center font-bold text-3xl pb-5'>Bacon cipher - encoder / decoder</h3>
             <div className="main-inner bg-gray-600 px-7 py-5  rounded-xl">
                 <Selection/>
@@ -18,9 +16,9 @@ const Main = () => {
             </div>
             <Cipher />
         </main>
-        </>
-       
-    )
+      
+    </>
+  )
 }
 
-export default Main
+export default App

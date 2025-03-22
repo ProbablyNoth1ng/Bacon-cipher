@@ -9,9 +9,9 @@ import { styled } from '@mui/material/styles';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 
-import type { RootState } from '../../lib/store'
+import type { RootState } from '../../store/store'
 import { useSelector, useDispatch } from 'react-redux'
-import { setSeparateValues,setReplaceValues, setMode, setAlphabetStyle, removeData } from '../../lib/features/baconCipher/baconCipherSlice'
+import { setSeparateValues,setReplaceValues, setMode, setAlphabetStyle, removeData, encrypt, decrypt } from '../../store/baconCipher/baconCipherSlice'
 
 const Selection = () => {
     const cipherData = useSelector((state:RootState) => state.baconCipher)
@@ -45,11 +45,13 @@ const Selection = () => {
     const handleReplace = () =>{
         setReplace(!replace)
         dispatch(setReplaceValues(!replace))
+        cipherData.mode === 'encode' ? dispatch(encrypt()) : dispatch(decrypt()) 
     }
     
     const handleSwitch = () => {
       setSeparateSwitch(!separateSwitch)
       dispatch(setSeparateValues(!separateSwitch))
+      cipherData.mode === 'encode' ? dispatch(encrypt()) : dispatch(decrypt()) 
     }
     return (
         <>

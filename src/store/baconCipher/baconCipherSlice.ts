@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit' 
 import type { PayloadAction } from '@reduxjs/toolkit'
-import { defaultTable,alternativeTable, defaultIJUVTable, alternativeIJUVTable } from '@/tables';
+import { defaultTable,alternativeTable, defaultIJUVTable, alternativeIJUVTable } from '../../tables';
 
 export interface BaconCipher {
     mode:'encode' | 'decode';
@@ -47,6 +47,7 @@ const baconCipherSlice = createSlice({
         setSeparateValues:(state,action:PayloadAction<boolean>) => {
             state.separateValues = action.payload
             console.log(`separate - ${action.payload}`)
+            
         },
         setReplaceValues:(state,action:PayloadAction<boolean>) => {
             state.replaceLetters = action.payload
@@ -115,25 +116,24 @@ const baconCipherSlice = createSlice({
             console.log('decrypt')
             let res:string[] = []
             let input: string[];
-            if(state.separateValues){
 
+            if(state.separateValues){
                input = state.inputText.split(' ')
                console.log(`inp - ${input}`)
-               if(state.alphabetStyle === 'standard'){
-                  for(let i = 0; i < input.length; i++){
-                  
-                    for(let j = 0; j < input[i].length; j+=5){
-                      let inputTableCode = input[i].slice(j,j+5)
-                      console.log(inputTableCode)
-                      Object.entries(state.substitutionTable).map(([tableLetter, tableCode]) => {
+                for(let i = 0; i < input.length; i++){
+                
+                  for(let j = 0; j < input[i].length; j+=5){
+                    let inputTableCode = input[i].slice(j,j+5)
+                    console.log(inputTableCode)
+                    Object.entries(state.substitutionTable).map(([tableLetter, tableCode]) => {
 
-                        if (inputTableCode === tableCode) {
-                          res.push(tableLetter);
-                        }
-                      });
-                    }
-                    res.push(' ')
-                }
+                      if (inputTableCode === tableCode) {
+                        res.push(tableLetter);
+                      }
+                    });
+                  }
+                  res.push(' ')
+                
                }
                
             } else {

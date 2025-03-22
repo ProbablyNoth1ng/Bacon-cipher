@@ -4,9 +4,9 @@ import { faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
 import { faCopy } from '@fortawesome/free-solid-svg-icons';
 import './Inputs.scss'  
  
-import type { RootState } from '../../lib/store'
+import type { RootState } from '../../store/store'
 import { useSelector, useDispatch } from 'react-redux'
-import { encrypt, decrypt, setInputText } from '../../lib/features/baconCipher/baconCipherSlice'
+import { encrypt, decrypt, setInputText } from '../../store/baconCipher/baconCipherSlice'
 
 const Inputs = () => {
     const [input,setInput] = useState<string>('')

@@ -1,7 +1,6 @@
 import './Cipher.scss'
-import type { RootState } from '../../lib/store'
+import type { RootState } from '../../store/store'
 import { useSelector, useDispatch } from 'react-redux'
-import { setInputText } from '../../lib/features/baconCipher/baconCipherSlice'
 
 const Cipher = () => {
     const cipher = useSelector((state:RootState) => state.baconCipher)
