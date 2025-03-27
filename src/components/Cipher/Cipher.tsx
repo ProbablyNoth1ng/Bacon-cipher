@@ -1,13 +1,12 @@
 import './Cipher.scss'
 import type { RootState } from '../../store/store'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 const Cipher = () => {
     const cipher = useSelector((state:RootState) => state.baconCipher)
-    const dispatch = useDispatch();
     return (
         <>
-            <div className="cipher bg-gray-700 rounded px-7 py-5 mt-10">
+            <div className="cipher bg-gray-600 rounded-xl px-7 py-5 mt-10">
                     <h3 className='text-white text-3xl text-center font-bold'>Cipher Key</h3>
                     <div className='keys pt-5'>
                         <table className='w-full caption-bottom text-lg'>

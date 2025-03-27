@@ -17,10 +17,9 @@ const Inputs = () => {
 
     const handleChangeInput = (e:any) => {
         setInput(e.target.value)
-        dispatch(setInputText(e.target.value))
+        dispatch(setInputText(e.target.value.toLowerCase()))
         cipherData.mode === 'encode' ? dispatch(encrypt()) : dispatch(decrypt())
-        
-        console.log()
+        console.log(input);
     }
 
     const clearInput = (e:any) => {
@@ -39,9 +38,9 @@ const Inputs = () => {
             <div className="inputs pt-10">
                 <h3 className="text-white">Input:</h3>
                 {cipherData.mode ? 
-                 <textarea placeholder="Type what to encode"  name="encode input" id="" onChange={handleChangeInput} value={cipherData.inputText} className="text-white user-input bg-gray-700 rounded-lg w-full p-2 mt-5"></textarea>
+                 <textarea placeholder="Type what to encode"  name="encode input" id="" onChange={handleChangeInput} value={input} className="text-white user-input bg-gray-700 rounded-lg w-full p-2 mt-5"></textarea>
                  :
-                 <textarea placeholder="Type what to decode"  name="decode input" id="" onChange={handleChangeInput} value={cipherData.inputText} className="text-white user-input bg-gray-700 rounded-lg w-full p-2 mt-5"></textarea>
+                 <textarea placeholder="Type what to decode"  name="decode input" id="" onChange={handleChangeInput} value={input} className="text-white user-input bg-gray-700 rounded-lg w-full p-2 mt-5"></textarea>
                 }
                
                 <div className="wrapper flex justify-end">

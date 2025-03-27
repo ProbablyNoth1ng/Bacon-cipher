@@ -25,6 +25,7 @@ const Selection = () => {
     const handleStandardChange = (event:any) => {
       setStandard(event.target.value);
       dispatch(setAlphabetStyle(event.target.value))
+      cipherData.mode === 'encode' ? dispatch(encrypt()) : dispatch(decrypt())
     }
 
     const handleCryptToggle = (event:any) => {
