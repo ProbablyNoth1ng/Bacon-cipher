@@ -21,7 +21,7 @@ const Cipher = () => {
                                     <tr key={letter} className='tr-cipher h-12 px-4 text-left align-middle font-medium text-muted-foreground '>
                                         <th className='h-12 px-4 text-left align-middle font-medium text-muted-foreground text-xl '>{letter}</th>
                                         <th className='h-12 px-4 text-left align-middle font-medium text-muted-foreground text-xl'>{code}</th>
-                                        </tr>
+                                    </tr>
                                 ))}
                             </tbody>
                         </table>

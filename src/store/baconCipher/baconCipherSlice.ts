@@ -55,18 +55,18 @@ const baconCipherSlice = createSlice({
             if(state.alphabetStyle === 'separate'){
               if(action.payload){
                 state.substitutionTable = alternativeTable;
-                console.log('fliped')
+                console.log('flipped')
               } else {
                 state.substitutionTable = defaultTable;
-                console.log('fliped')
+                console.log('flipped')
               }
             } else {
               if(action.payload){
                 state.substitutionTable = alternativeIJUVTable;
-                console.log('fliped')
+                console.log('flipped')
               } else {
                 state.substitutionTable = defaultIJUVTable;
-                console.log('fliped')
+                console.log('flipped')
               }
             }
           
@@ -127,30 +127,32 @@ const baconCipherSlice = createSlice({
                     console.log(inputTableCode)
                     Object.entries(state.substitutionTable).map(([tableLetter, tableCode]) => {
 
-                      if (inputTableCode === tableCode) {
-                        res.push(tableLetter);
+                      if (inputTableCode.toUpperCase() === tableCode) {
+                        res.push(tableLetter);  
                       }
                     });
                   }
                   res.push(' ')
                 
                }
-               
+               console.log(res)
             } else {
               input = state.inputText.split('')
-                
+              
               for(let i = 0; i < input.length; i+=5){
                 let inputTableCode = input.slice(i,i+5).join('')
-                console.log(`${i} - ${input.slice(i,i+5).join('')} - slice`)
+                console.log(`${i} - ${input.slice(i,i+5).join('')}`)
                 Object.entries(state.substitutionTable).map(([tableLetter, tableCode]) => {
 
-                  if (inputTableCode === tableCode) {
+                  if (inputTableCode.toUpperCase() === tableCode) {
                     console.log(`inputcode - ${inputTableCode}`)
                     console.log(`letter- ${tableLetter}`)
                     res.push(tableLetter);
                   }
                 });
               }
+
+              
             }
             console.log(res)
 
